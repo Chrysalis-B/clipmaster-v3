@@ -5,7 +5,12 @@ import {
   clipboard,
   ipcMain,
   globalShortcut,
+  Notification,
+  Tray,
+  Menu,
 } from 'electron';
+
+let tray: Tray | null = null;
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -39,10 +44,38 @@ const createWindow = () => {
 app.on('ready', () => {
   const browserWindow = createWindow();
 
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show App',
+      click: () => {
+        app.focus();
+        browserWindow.show();
+        browserWindow.focus();
+      },
+    },
+    {
+      label: 'Quit',
+      role: 'quit',
+    },
+  ]);
+
+  tray = new Tray('./src/icons/trayTemplate.png');
+  tray.setContextMenu(contextMenu);
+
   globalShortcut.register('CommandOrControl+Shift+V', () => {
     app.focus();
     browserWindow.show();
     browserWindow.focus();
+  });
+
+  globalShortcut.register('CommandOrControl+Shift+X', () => {
+    const content = clipboard.readText().toUpperCase();
+    clipboard.writeText(content);
+    new Notification({
+      body: content,
+      title: 'Capitalized Clipboard',
+      subtitle: 'Copied to clipboard',
+    }).show();
   });
 });
 
