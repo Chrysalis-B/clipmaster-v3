@@ -1,5 +1,11 @@
 import { join } from 'node:path';
-import { app, BrowserWindow } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  clipboard,
+  ipcMain,
+  globalShortcut,
+} from 'electron';
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -30,7 +36,15 @@ const createWindow = () => {
   return mainWindow;
 };
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  const browserWindow = createWindow();
+
+  globalShortcut.register('CommandOrControl+Shift+V', () => {
+    app.focus();
+    browserWindow.show();
+    browserWindow.focus();
+  });
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -42,4 +56,16 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+app.on('quit', () => {
+  globalShortcut.unregisterAll();
+});
+
+ipcMain.on('write-to-clipboard', (_, content: string) => {
+  clipboard.writeText(content);
+});
+
+ipcMain.handle('read-from-clipboard', () => {
+  return clipboard.readText();
 });
