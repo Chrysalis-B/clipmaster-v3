@@ -80,7 +80,7 @@ label {
   @apply font-semibold;
 }
 
-input:checked + label {
+input:checked+label {
   @apply pl-2 font-semibold text-primary-900 transition-colors hover:text-primary-800;
 }
 
@@ -88,7 +88,7 @@ select {
   @apply block w-full rounded border-2 border-purple-700 px-4 py-2 pr-8 shadow hover:bg-primary-200 hover:accent-primary-700 focus:bg-primary-50 focus:outline-none disabled:border-slate-500 disabled:bg-slate-100 disabled:placeholder-slate-400;
 }
 
-.flex > input + button {
+.flex>input+button {
   @apply whitespace-nowrap border-l-0;
 }
 
@@ -118,4 +118,9 @@ select {
 
 .drag-error {
   @apply border-2 border-dashed border-error-500 bg-error-100;
+}
+
+#title-bar {
+  -webkit-app-region: drag;
+  user-select: none;
 }

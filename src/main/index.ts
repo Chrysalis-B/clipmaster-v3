@@ -5,6 +5,13 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 400,
     height: 600,
+    minHeight: 600,
+    minWidth: 300,
+    maxHeight: 800,
+    maxWidth: 450,
+    maximizable: false,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: true,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
     },
@@ -14,7 +21,7 @@ const createWindow = () => {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(
-      join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
+      join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
     );
   }
 
